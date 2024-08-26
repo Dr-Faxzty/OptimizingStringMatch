@@ -24,14 +24,14 @@ Questa repository documenta il nostro percorso di miglioramento degli algoritmi 
 
 ## Obiettivi del Progetto
 
-- **Documentare** e **implementare** le varianti principali degli algoritmi di String Matching.
-- **Ottimizzare** e **sperimentare** tecniche avanzate per migliorare le prestazioni di ciascun algoritmo.
+- **Documentare** le varianti principali degli algoritmi di String Matching.
+- **Ottimizzare** e **sperimentare** tecniche avanzate per migliorare le prestazioni dell'**Algoritmo di Horspool**.
 - **Confrontare** l'efficienza degli algoritmi in diverse situazioni, sia teoriche che pratiche.
 - **Condividere** i risultati e creare una base di conoscenza per futuri sviluppatori e ricercatori interessati al campo.
 
 ## Struttura della Repository
 
-- `src/`: Contiene il codice sorgente degli algoritmi implementati e ottimizzati.
+- `src/`: Contiene il codice sorgente degli algoritmi implementati.
 - `tests/`: Include test su vari dataset di esempio per misurare e confrontare le prestazioni degli algoritmi.
 - `docs/`: Documentazione dettagliata del percorso seguito, inclusi articoli, spiegazioni tecniche, e riflessioni sui risultati ottenuti.
 
