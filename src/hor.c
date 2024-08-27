@@ -1,0 +1,48 @@
+#include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
+#define SIGMA 256
+
+
+void Pre_Horspool(unsigned char *P, int m, int hbc[]) 
+{
+   int i;
+   for(i=0;i<SIGMA;i++) hbc[i]=m;
+   for(i=0;i<m-1;i++) hbc[P[i]]=m-i-1;
+}
+
+
+int search(unsigned char *P, unsigned char *T) 
+{
+    int i, shift = 0, count = 0, hbc[SIGMA];
+
+    int n = strlen(T);
+    int m = strlen(P);
+
+    Pre_Horspool(P, m, hbc);
+    
+    while(shift<=n-m) 
+    {
+        i=0;
+        
+        while(i<m && P[i]==T[shift+i]) i++;
+        
+        if(i==m) count++;
+        
+        shift+=hbc[T[shift+m-1]];
+    }
+    
+    return count;
+}
+
+
+int main()
+{
+    unsigned char txt[] = "ABAAABCD";
+    unsigned char pat[] = "ABC";
+    int count = search(pat, txt);
+    printf("pattern occurs %d times", count);
+    return 0;
+
+}
