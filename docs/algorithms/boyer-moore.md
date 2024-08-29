@@ -80,12 +80,3 @@ int main()
     return 0;
 }
 ```
-
-
-## Descrizione Dettagliata del Codice
-
-Il codice fornito implementa una versione semplificata dell'algoritmo di **Boyer-Moore**, sfruttando principalmente l'**euristica del cattivo carattere**. Questa implementazione si concentra sull'efficienza e sulla capacità di saltare porzioni del testo durante la ricerca di un pattern.
-
-
-
-dubidubidubadubidubidubadu
