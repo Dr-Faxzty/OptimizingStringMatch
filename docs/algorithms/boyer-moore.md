@@ -1,71 +1,89 @@
 # Algoritmo di Boyer-Moore
 
-L'algoritmo di **Boyer-Moore** è uno degli algoritmi più efficienti per il problema dello string matching. Fu sviluppato da Robert S. Boyer e J Strother Moore nel 1977. Questo algoritmo sfrutta il contenuto del pattern per "saltare" porzioni del testo, migliorando notevolmente la velocità rispetto a soluzioni più ingenue come l'algoritmo di ricerca a forza bruta.
+## Introduzione
 
-## Descrizione dell'Algoritmo
+L'algoritmo di Boyer-Moore è uno degli algoritmi più efficienti per la ricerca di pattern in un testo. Sfrutta due euristiche: la **"bad character heuristic"** e la **"good suffix heuristic"**, che permettono di ridurre notevolmente il numero di confronti rispetto agli algoritmi di forza bruta. 
 
-Il Boyer-Moore utilizza due principali euristiche per ridurre il numero di confronti durante la ricerca di un pattern nel testo:
+Nella sua forma base, l'algoritmo di Boyer-Moore utilizza la "bad character heuristic" per determinare gli spostamenti del pattern rispetto al testo, rendendolo particolarmente efficiente per pattern lunghi.
 
-- **Euristica del Cattivo Carattere (Bad Character Heuristic)**: Se c'è un mismatch tra il pattern e il testo, si cerca la posizione del carattere "cattivo" (quello che ha causato il mismatch) all'interno del pattern stesso. In base a questa posizione, il pattern viene spostato in avanti.
-  
-- **Euristica del Buon Suffisso (Good Suffix Heuristic)**: Se c'è un suffisso del pattern che è stato trovato corrispondente al testo, l'algoritmo tenta di riallineare un altro suffisso del pattern al testo, piuttosto che ricominciare da capo.
+## Funzionamento dell'Algoritmo
 
-Nel codice fornito, viene implementata l'euristica del cattivo carattere. L'euristica del buon suffisso non è presente in questa versione base, ma è una delle estensioni tipiche che rende l'algoritmo ancora più efficiente.
+### Fase 1: Preprocessing
 
-## Codice dell'Algoritmo
+L'algoritmo inizia costruendo una tabella di spostamenti per la "bad character heuristic". Questa tabella indica, per ogni carattere dell'alfabeto, la posizione dell'ultima occorrenza di quel carattere nel pattern. Se si verifica un mismatch durante la ricerca, l'algoritmo utilizza questa tabella per determinare quanto spostare il pattern in avanti.
+
+### Fase 2: Ricerca
+
+Durante la ricerca, l'algoritmo allinea il pattern con il testo e confronta i caratteri da destra verso sinistra. Se c'è un mismatch, il pattern viene spostato utilizzando le informazioni della tabella di spostamenti. Questo permette di saltare più posizioni nel testo, riducendo il numero di confronti.
+
+### Vantaggi
+
+- **Efficienza**: L'algoritmo di Boyer-Moore può, in alcuni casi, saltare intere sezioni del testo, riducendo drasticamente il numero di confronti.
+- **Versatilità**: Boyer-Moore è particolarmente efficace per pattern lunghi, soprattutto in testi grandi e quando si verificano mismatch frequenti.
+
+## Codice dell'Algoritmo di Boyer-Moore
 
 ```c
 #include <limits.h>
 #include <stdio.h>
 #include <string.h>
 
-#define SIGMA 256
+#define SIGMA 256 // Dimensione dell'alfabeto ASCII
+
 
 int max(int a, int b) { return (a > b) ? a : b; }
 
+/**
+ * Funzione di preprocessing: badCharHeuristic
+ * Costruisce la tabella delle distanze di salto per i caratteri del pattern.
+ */
 void badCharHeuristic(char* str, int size, int badchar[SIGMA])
 {
     int i;
 
-    // Inizializza il bad character array
+    // Inizializza tutte le occorrenze dei caratteri a -1
     for (i = 0; i < SIGMA; i++)
         badchar[i] = -1;
 
-    // Riempie il bad character array con l'ultimo indice di ogni carattere nel pattern
+    // Assegna l'indice dell'ultima occorrenza di ogni carattere nel pattern
     for (i = 0; i < size; i++)
         badchar[(int)str[i]] = i;
 }
 
+/**
+ * Funzione di ricerca: search
+ * Esegue la ricerca del pattern `pat` nel testo `txt` utilizzando l'algoritmo di Boyer-Moore.
+ */
 void search(char* txt, char* pat)
 {
     int m = strlen(pat);  // Lunghezza del pattern
     int n = strlen(txt);  // Lunghezza del testo
 
-    int badchar[SIGMA];
+    int badchar[SIGMA];  // Tabella delle distanze di salto per la bad character heuristic
 
-    // Preprocessing del pattern per l'euristica del cattivo carattere
+    // Costruisce la tabella delle distanze per il pattern
     badCharHeuristic(pat, m, badchar);
 
-    int s = 0;  // s rappresenta lo shift del pattern rispetto al testo
+    int s = 0;  // s è lo spostamento del pattern rispetto al testo
 
-    // Ciclo per cercare tutte le occorrenze del pattern
+    // Loop principale di ricerca
     while (s <= (n - m)) {
         int j = m - 1;
 
-        // Confronta il pattern con il testo da destra a sinistra
+        // Confronta i caratteri del pattern e del testo da destra verso sinistra
         while (j >= 0 && pat[j] == txt[s + j])
             j--;
 
-        // Se il pattern è completamente trovato
+        // Se il pattern è stato trovato, stampa l'indice
         if (j < 0) 
         {
-            printf("\n pattern occurs at shift = %d", s);
+            printf("\nPattern trovato con shift = %d", s);
 
-            // Shift del pattern in base alla prossima possibile occorrenza
+            // Sposta il pattern in base alla tabella di distanze
             s += (s + m < n) ? m - badchar[txt[s + m]] : 1;
         }
         else
-            // Shift del pattern in base alla euristica del cattivo carattere
+            // In caso di mismatch, utilizza la tabella per determinare lo spostamento
             s += max(1, j - badchar[txt[s + j]]);
     }
 }
