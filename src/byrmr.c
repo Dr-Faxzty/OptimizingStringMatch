@@ -9,11 +9,11 @@ int max(int a, int b) { return (a > b) ? a : b; }
 void badCharHeuristic(char* str, int size, int badchar[SIGMA])
 {
     int i;
- 
-    for (i = 0; i < SIGMA; i++)
+
+    for (i = 0; i < SIGMA; i++) 
         badchar[i] = -1;
- 
-    for (i = 0; i < size; i++)
+    
+    for (i = 0; i < size; i++) 
         badchar[(int)str[i]] = i;
 }
  
@@ -44,7 +44,6 @@ void search(char* txt, char* pat)
     }
 }
  
-
 int main()
 {
     char txt[] = "ABAAABCD";

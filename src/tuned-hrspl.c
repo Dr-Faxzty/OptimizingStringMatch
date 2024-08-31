@@ -2,9 +2,7 @@
 #include <stdlib.h>
 #include <string.h>
 
-
 #define SIGMA 256
-
 
 void swap(int *sig, int i, int j)
 {
@@ -37,17 +35,16 @@ void quicksort(double v[], int left, int right, int sig[])
     if(i < right) quicksort(v, i, right, sig);
 }
 
-
 void Pre_Horspool(unsigned char *P, int m, int hbc[])
 {
 	int i;
+
 	for (i = 0; i < SIGMA; i++)
 		hbc[i] = m;
 
 	for (i = 0; i < m - 1; i++)
 		hbc[P[i]] = m - i - 1;
 }
-
 
 int *select_pivot_character(unsigned char *text, int n)
 {
@@ -74,40 +71,31 @@ int *select_pivot_character(unsigned char *text, int n)
 	return sig;
 }
 
-
 int tun(unsigned char *P, unsigned char *T)
 {
-
-	int i, s, count, hbc[SIGMA];
+	int i, hbc[SIGMA];
 
     int m = strlen(P);
     int n = strlen(T);
 
-
-	int *frequency = select_pivot_character(T, n);
-
-	int order[m];
-
-	int pos = 0;
-	int car = 0;
-
-
 	Pre_Horspool(P, m, hbc);
+	
+	int *frequency = select_pivot_character(T, n);
+	int order[m];
+	int pos = 0, car = 0;
 
 	while (pos < m)
 	{
 		for (int i = 0; i < m; i++)
 		{
 			if (P[i] == frequency[car])
-			{
 				order[pos++] = i;
-			}
 		}
 		car++;
 	}
 
-	s = 0;
-	count = 0;
+	int s = 0, count = 0;
+
 	while (s <= n - m)
 	{
 		i = 0;
@@ -123,9 +111,7 @@ int tun(unsigned char *P, unsigned char *T)
 	return count;
 }
 
-
 int search(unsigned char *x, unsigned char *y) { return tun(x, y); }
-
 
 int main()
 {
