@@ -81,7 +81,7 @@ int search(unsigned char *P, unsigned char *T)
 
 int main()
 {
-    unsigned char txt[] = "ABAAABCD"; s
+    unsigned char txt[] = "ABAAABCD";
     unsigned char pat[] = "ABC";       
 
     int count = search(pat, txt);  
