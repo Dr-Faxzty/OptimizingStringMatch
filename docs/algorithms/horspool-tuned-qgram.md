@@ -97,11 +97,11 @@ int *select_pivot_character(unsigned char *text, int n)
     for (i = 0; i < n - 1; i++)
         occ[text[i] * SIGMA + text[i + 1]]++;
 
-    // Calcola le frequenze relative dei q-grammi
+    // Calcola le frequenze in percentuale dei q-grammi
     for (i = 0; i < SIGMA * SIGMA; i++)
         freq[i] = (double)occ[i] / (double)n * 100;
 
-    // Sposta i q-grammi con frequenza 0 all'inizio dell'array sig
+    // Sposta i q-grammi non presenti nel testo all'inizio dell'array sig
     for (i = 0, j = 0; i < SIGMA * SIGMA; i++)
         if (freq[i] == 0)
             swap(sig, i, j++);
@@ -131,29 +131,29 @@ int tun(unsigned char *P, unsigned char *T)
     int order[m / 2 + m % 2];  // Array per memorizzare l'ordine dei q-grammi
     int pos = 0, car = 0;
 
-    // Determina l'ordine di confronto dei q-grammi del pattern in base alle frequenze
+    // Ottiene gli indici dei q-grammi del pattern dal meno frequente al più frequente 
     while (pos < m / 2)
     {
         for (int i = 0; i < m - 1; i += 2)
-        {
+        { 
             if (P[i] * SIGMA + P[i + 1] == frequency[car])
                 order[pos++] = i;
         }
         car++;
     }
 
-    // Gestione per il carattere rimanente (se la lunghezza è dispari)
+    // Ciclo per il conteggio delle occorrenze del pattern
     int shift = 0, count = 0;
     while (shift <= n - m)
     {
         i = 0;
-        // Confronta il pattern con una porzione del testo
+        // Confronta i q-grammi del il pattern con una porzione del testo seguendo l'ordine ottenuto precedentemente
         while (i < m / 2 && P[order[i]] == T[shift + order[i]] && P[order[i] + 1] == T[shift + order[i] + 1])
             i++;
 
-        // Se tutti i q-grammi sono uguali e il pattern è di lunghezza dispari, controlla anche l'ultimo carattere rimanente
+        // se tutti i q-grammi più l'ultimo carattere se il pattern ha lunghezza dispari, coincidono con il testo 
         if (i == m / 2 && (m % 2 == 0 || P[m - 1] == T[shift + m - 1]))
-            count++;
+            count++;  // aumenta il conteggio delle occorrenze del pattern sul testo
 
         // Sposta il pattern verso destra in base alla tabella di spostamenti
         shift += hbc[T[shift + m - 2] * SIGMA + T[shift + m - 1]];
